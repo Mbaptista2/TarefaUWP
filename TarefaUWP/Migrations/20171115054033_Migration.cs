@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace TarefaUWP.Migrations
 {
-    public partial class Migration : Migration
+    public partial class MigrationUWP : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

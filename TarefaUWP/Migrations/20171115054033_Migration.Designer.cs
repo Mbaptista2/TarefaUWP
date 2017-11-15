@@ -9,7 +9,7 @@ namespace TarefaUWP.Migrations
 {
     [DbContext(typeof(Contexto))]
     [Migration("20171115054033_Migration")]
-    partial class Migration
+    partial class MigrationUWP
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
