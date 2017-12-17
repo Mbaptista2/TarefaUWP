@@ -56,7 +56,7 @@
                             <RowDefinition/>
                         </Grid.RowDefinitions>
                         <StackPanel Margin="50" Orientation="Vertical" Grid.RowSpan="2">
-                            <ComboBox ItemsSource="{x:Bind ViewModel.ItensParaCombo}" Header="Selecione um mês:" Width="250" SelectedItem="Todos" >
+                            <ComboBox ItemsSource="{x:Bind ViewModel.ItensParaCombo}" Header="Selecione um mês:" Width="250" SelectionChanged="ComboBox_SelectionChanged" Name="cbMesAno"  >
                                 <ComboBox.ItemTemplate>
                                     <DataTemplate x:DataType="x:String">
                                         <TextBlock Text="{x:Bind }"/>
@@ -66,7 +66,7 @@
                         </StackPanel>
                         <StackPanel Orientation="Vertical" Grid.Row="2">
                             <TextBlock Text="Receitas" Margin="0,0,0,50" FontSize="{ThemeResource TextStyleExtraLargeFontSize}" TextAlignment="Center"/>
-                            <ListView  ItemsSource="{x:Bind ViewModel.LancamentosReceita}" Width="800">
+                            <ListView  ItemsSource="{x:Bind ViewModel.LancamentosReceita}" Width="800" Name="Receitas">
                                 <ListView.HeaderTemplate>
                                     <DataTemplate>
                                         <Grid Padding="12" Background="{ThemeResource SystemBaseLowColor}">

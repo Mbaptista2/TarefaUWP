@@ -23,6 +23,11 @@ namespace TarefaUWP.ViewModel
                 LancamentoRepositorio LancRepo = new LancamentoRepositorio();
                 List<Lancamentos> listaLancamentos = LancRepo.CarregarTodos();
 
+                LancamentosReceita = new ObservableCollection<Lancamentos>();
+                LancamentosDespesas = new ObservableCollection<Lancamentos>();
+                LancamentosBalanco = new ObservableCollection<Balanco>();
+                    
+
                 ItensParaCombo = new ObservableCollection<string>();
                 ItensParaCombo.Add("Todos");
                 listaLancamentos.Where(p => p.Tipo == "R").ToList().ForEach(e => LancamentosReceita.Add(e));   
@@ -35,6 +40,27 @@ namespace TarefaUWP.ViewModel
                 LancamentosBalanco.Add(bal);
 
                 RetornarListaCombo(listaLancamentos).ForEach(e => ItensParaCombo.Add(e));
+            }
+        }
+
+        public void Initialize(int mes, int ano)
+        {
+            using (var context = new Contexto())
+            {
+                LancamentosReceita.Clear();
+                LancamentosDespesas.Clear();
+                LancamentosBalanco.Clear();
+
+                LancamentoRepositorio LancRepo = new LancamentoRepositorio();
+                List<Lancamentos> listaLancamentos = LancRepo.CarregarTodos();              
+                listaLancamentos.Where(p => p.Tipo == "R" && p.DataLancamento.Month == mes && p.DataLancamento.Year == ano).ToList().ForEach(e => LancamentosReceita.Add(e));
+                listaLancamentos.Where(p => p.Tipo == "D" && p.DataLancamento.Month == mes && p.DataLancamento.Year == ano).ToList().ForEach(e => LancamentosDespesas.Add(e));
+                Balanco bal = new Balanco();
+                bal.ValorReceita = LancamentosReceita.Sum(p => p.Valor);
+                bal.ValorDespesa = LancamentosDespesas.Sum(p => p.Valor);
+                bal.ValorBalanco = bal.ValorReceita - bal.ValorDespesa;
+                LancamentosBalanco.Add(bal);
+                
             }
         }
 
@@ -76,9 +102,9 @@ namespace TarefaUWP.ViewModel
         }
         #endregion
 
-        public ObservableCollection<Lancamentos> LancamentosReceita { get; set; } = new ObservableCollection<Lancamentos>();
-        public ObservableCollection<Lancamentos> LancamentosDespesas { get; set; } = new ObservableCollection<Lancamentos>();
-        public ObservableCollection<Balanco> LancamentosBalanco { get; set; } = new ObservableCollection<Balanco>();
+        public ObservableCollection<Lancamentos> LancamentosReceita { get; set; }
+        public ObservableCollection<Lancamentos> LancamentosDespesas { get; set; } 
+        public ObservableCollection<Balanco> LancamentosBalanco { get; set; }
 
         public ObservableCollection<string> ItensParaCombo { get; set; }
 
@@ -120,30 +146,7 @@ namespace TarefaUWP.ViewModel
                 case 12: return "Dezembro";
                 default: return "Inválido";
             }
-        }
-        public override string ToString()
-        {
-            return base.ToString();
-        }
-
-        public ICommand OnButtonClick
-        {
-            get
-            {
-                return new RelayCommand(ButtonClick);
-            }
-        }
-
-        private async void ButtonClick()
-        {
-            var dialog = new ContentDialog
-            {
-                Content = (SelectedClassicItem ?? new Aluno()).Nome,
-                SecondaryButtonText = "Ok"
-            };
-
-            await dialog.ShowAsync();
-        }
+        }      
     }
        
 }

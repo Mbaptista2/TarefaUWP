@@ -40,16 +40,48 @@ namespace TarefaUWP.View.Lancamentos
             this.DataContext = ViewModel;
         }
 
-        private void LancamentosView_Loaded(object sender, RoutedEventArgs e)
-        {
-            ViewModel.Initialize();
+        public LancamentosView(int mes, int ano)
+        {                
+            ViewModel = new LancamentosVM();
+            ViewModel.Initialize(mes, ano);
+            this.DataContext = ViewModel;
         }
+        
 
         private void HamburgerButton_Click(object sender, RoutedEventArgs e)
         {
             SplitView1.IsPaneOpen = !SplitView1.IsPaneOpen;
         }
-        
+
+        private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            string[] mesano = cbMesAno.SelectedItem.ToString().Split('/');
+
+            if (mesano.Length > 1)
+                ViewModel.Initialize(RetornaMes(mesano[0]), Convert.ToInt32(mesano[1]));
+            else
+                ViewModel.Initialize();
+            this.DataContext = ViewModel;
+        }
+        private int RetornaMes(string mes)
+        {
+            switch (mes)
+            {
+                case "Janeiro": return 1;
+                case "Fevereiro": return 2;
+                case "Março": return 3;
+                case "Abril": return 4;
+                case "Maio": return 5;
+                case "Junho": return 6;
+                case "Julho": return 7;
+                case "Agosto": return 8;
+                case "Setembro": return 9;
+                case "Outubro": return 10;
+                case "Novembro": return 11;
+                case "Dezembro": return 12;
+                default: return 99;
+            }
+        }
     }
     
 }
