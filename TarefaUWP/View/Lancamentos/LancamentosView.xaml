@@ -5,29 +5,184 @@
     xmlns:local="using:TarefaUWP.View.Lancamentos"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+     xmlns:data="using:TarefaUWP.ViewModel"
+     xmlns:model="using:TarefaUWP.Model"
+    xmlns:cvt="using:TarefaUWP.Converters"
     mc:Ignorable="d">
 
+
+    <Page.DataContext>
+        <data:LancamentosVM/>
+    </Page.DataContext>
+
+    <Page.Resources>
+        <cvt:DateTimeToStringConverter x:Key="DataConverter" />
+        <cvt:ValorToStringConverter x:Key="ValorConverter"/>
+    </Page.Resources>
+
+
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-        <SplitView x:Name="SplitView1" OpenPaneLength="220" DisplayMode="CompactOverlay" CompactPaneLength="48">
+        <SplitView x:Name="SplitView1" OpenPaneLength="200" DisplayMode="CompactOverlay" CompactPaneLength="48">
             <SplitView.Pane>
                 <StackPanel>
                     <Button Width="50" Height="50" x:Name="HamburgerButton" FontFamily="Segoe MDL2 Assets" Content="&#xE700;"
-                     Background="Transparent"  />
+                     Background="Transparent"   Click="HamburgerButton_Click"/>
 
                     <StackPanel Orientation="Horizontal">
                         <Button x:Name="MenuButton1" FontFamily="Segoe MDL2 Assets" Content="&#xE10F;"
                        Width="50" Height="50" Background="Transparent" />
-                        <TextBlock Text="Button 1" FontSize="18" VerticalAlignment="Center" />
+                        <TextBlock Text="Despesas" FontSize="18" VerticalAlignment="Center" />
                     </StackPanel>
                     <StackPanel Orientation="Horizontal">
                         <Button x:Name="MenuButton2" FontFamily="Segoe MDL2 Assets" Content="&#xE1D6;"
                        Width="50" Height="50" Background="Transparent" />
-                        <TextBlock Text="Button 2" FontSize="18" VerticalAlignment="Center" />
+                        <TextBlock Text="Configurações" FontSize="18" VerticalAlignment="Center" />
                     </StackPanel>
                 </StackPanel>
             </SplitView.Pane>
             <SplitView.Content>
-                <Frame x:Name="frame1" />
+                <ScrollViewer ZoomMode="Enabled" MaxZoomFactor="10"
+              HorizontalScrollBarVisibility="Visible"
+              Height="800">
+                    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="127.217"/>
+                            <RowDefinition Height="52.783"/>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+                        <StackPanel Margin="50" Orientation="Vertical" Grid.RowSpan="2">
+                            <ComboBox ItemsSource="{x:Bind ViewModel.ItensParaCombo}" Header="Selecione um mês:" Width="250" SelectedItem="Todos" >
+                                <ComboBox.ItemTemplate>
+                                    <DataTemplate x:DataType="x:String">
+                                        <TextBlock Text="{x:Bind }"/>
+                                    </DataTemplate>
+                                </ComboBox.ItemTemplate>
+                            </ComboBox>
+                        </StackPanel>
+                        <StackPanel Orientation="Vertical" Grid.Row="2">
+                            <TextBlock Text="Receitas" Margin="0,0,0,50" FontSize="{ThemeResource TextStyleExtraLargeFontSize}" TextAlignment="Center"/>
+                            <ListView  ItemsSource="{x:Bind ViewModel.LancamentosReceita}" Width="800">
+                                <ListView.HeaderTemplate>
+                                    <DataTemplate>
+                                        <Grid Padding="12" Background="{ThemeResource SystemBaseLowColor}">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="250"/>
+                                                <ColumnDefinition Width="250"/>
+                                                <ColumnDefinition Width="250"/>
+                                            </Grid.ColumnDefinitions>
+                                            <TextBlock Text="Descrição" Style="{ThemeResource CaptionTextBlockStyle}"/>
+                                            <TextBlock Grid.Column="1" Text="Data" Style="{ThemeResource CaptionTextBlockStyle}"/>
+                                            <TextBlock Grid.Column="2" Text="Valor" Style="{ThemeResource CaptionTextBlockStyle}"/>
+                                        </Grid>
+                                    </DataTemplate>
+                                </ListView.HeaderTemplate>
+                                <ListView.ItemTemplate>
+                                    <DataTemplate x:Name="TableDataTemplateDesp" x:DataType="model:Lancamentos">
+                                        <Grid Height="48" AutomationProperties.Name="{x:Bind  Descricao}">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="48"/>
+                                                <ColumnDefinition Width="250"/>
+                                                <ColumnDefinition Width="250"/>
+                                                <ColumnDefinition Width="250"/>
+                                            </Grid.ColumnDefinitions>
+                                            <Ellipse Height="32" Width="32" VerticalAlignment="Center">
+                                                <Ellipse.Fill>
+                                                    <ImageBrush ImageSource="Placeholder.png"/>
+                                                </Ellipse.Fill>
+                                            </Ellipse>
+                                            <TextBlock Grid.Column="1" VerticalAlignment="Center" Style="{ThemeResource BaseTextBlockStyle}" Text="{x:Bind Descricao}" />
+                                            <TextBlock Grid.Column="2" VerticalAlignment="Center" Text="{x:Bind DataLancamento, Mode=TwoWay,Converter={StaticResource DataConverter}}"/>
+                                            <TextBlock Grid.Column="3" VerticalAlignment="Center" Text="{x:Bind Valor, Mode=TwoWay,Converter={StaticResource ValorConverter }}" Foreground="Green" />
+                                        </Grid>
+                                    </DataTemplate>
+                                </ListView.ItemTemplate>
+                            </ListView>
+                        </StackPanel>
+                        <StackPanel Orientation="Vertical" Grid.Row="3">
+                            <TextBlock Text="Despesas" Margin="0,0,0,50" FontSize="{ThemeResource TextStyleExtraLargeFontSize}" TextAlignment="Center"/>
+                            <ListView  ItemsSource="{x:Bind ViewModel.LancamentosDespesas}" Width="800">
+                                <ListView.HeaderTemplate>
+                                    <DataTemplate>
+                                        <Grid Padding="12" Background="{ThemeResource SystemBaseLowColor}">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="250"/>
+                                                <ColumnDefinition Width="250"/>
+                                                <ColumnDefinition Width="250"/>
+                                            </Grid.ColumnDefinitions>
+                                            <TextBlock Text="Descrição" Style="{ThemeResource CaptionTextBlockStyle}"/>
+                                            <TextBlock Grid.Column="1" Text="Data" Style="{ThemeResource CaptionTextBlockStyle}"/>
+                                            <TextBlock Grid.Column="2" Text="Valor" Style="{ThemeResource CaptionTextBlockStyle}"/>
+                                        </Grid>
+                                    </DataTemplate>
+                                </ListView.HeaderTemplate>
+                                <ListView.ItemTemplate>
+                                    <DataTemplate x:Name="TableDataTemplatebal" x:DataType="model:Lancamentos">
+                                        <Grid Height="48" AutomationProperties.Name="{x:Bind  Descricao}">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="48"/>
+                                                <ColumnDefinition Width="250"/>
+                                                <ColumnDefinition Width="250"/>
+                                                <ColumnDefinition Width="250"/>
+                                            </Grid.ColumnDefinitions>
+                                            <Ellipse Height="32" Width="32" VerticalAlignment="Center">
+                                                <Ellipse.Fill>
+                                                    <ImageBrush ImageSource="Placeholder.png"/>
+                                                </Ellipse.Fill>
+                                            </Ellipse>
+                                            <TextBlock Grid.Column="1" VerticalAlignment="Center" Style="{ThemeResource BaseTextBlockStyle}" Text="{x:Bind Descricao}" />
+                                            <TextBlock Grid.Column="2" VerticalAlignment="Center" Text="{x:Bind DataLancamento, Mode=TwoWay,Converter={StaticResource DataConverter}}"/>
+                                            <TextBlock Grid.Column="3" VerticalAlignment="Center" Text="{x:Bind Valor, Mode=TwoWay,Converter={StaticResource ValorConverter }}" Foreground="Red" />
+                                        </Grid>
+                                    </DataTemplate>
+                                </ListView.ItemTemplate>
+                            </ListView>
+                        </StackPanel>
+                        <StackPanel Orientation="Vertical" Grid.Row="4">
+                            <TextBlock Text="Balanço" Margin="0,0,0,50" FontSize="{ThemeResource TextStyleExtraLargeFontSize}" TextAlignment="Center"/>
+                            <ListView  ItemsSource="{x:Bind ViewModel.LancamentosBalanco}" Width="800">
+                                <ListView.HeaderTemplate>
+                                    <DataTemplate>
+                                        <Grid Padding="12" Background="{ThemeResource SystemBaseLowColor}">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="250"/>
+                                                <ColumnDefinition Width="250"/>
+                                                <ColumnDefinition Width="250"/>
+                                            </Grid.ColumnDefinitions>
+                                            <TextBlock Text="Receitas" Style="{ThemeResource CaptionTextBlockStyle}"/>
+                                            <TextBlock Grid.Column="1" Text="Despesas" Style="{ThemeResource CaptionTextBlockStyle}"/>
+                                            <TextBlock Grid.Column="2" Text="Balanço" Style="{ThemeResource CaptionTextBlockStyle}"/>
+                                        </Grid>
+                                    </DataTemplate>
+                                </ListView.HeaderTemplate>
+                                <ListView.ItemTemplate>
+                                    <DataTemplate x:Name="TableDataTemplate" x:DataType="model:Balanco">
+                                        <Grid Height="48" AutomationProperties.Name="{x:Bind ValorDespesa}">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="48"/>
+                                                <ColumnDefinition Width="250"/>
+                                                <ColumnDefinition Width="250"/>
+                                                <ColumnDefinition Width="250"/>
+                                            </Grid.ColumnDefinitions>
+                                            <Ellipse Height="32" Width="32" VerticalAlignment="Center">
+                                                <Ellipse.Fill>
+                                                    <ImageBrush ImageSource="Placeholder.png"/>
+                                                </Ellipse.Fill>
+                                            </Ellipse>
+                                            <TextBlock Grid.Column="1" VerticalAlignment="Center" Text="{x:Bind ValorReceita, Mode=TwoWay,Converter={StaticResource ValorConverter }}" />
+                                            <TextBlock Grid.Column="2" VerticalAlignment="Center" Text="{x:Bind ValorDespesa, Mode=TwoWay,Converter={StaticResource ValorConverter }}"/>
+                                            <TextBlock Grid.Column="3" VerticalAlignment="Center" Text="{x:Bind ValorBalanco, Mode=TwoWay,Converter={StaticResource ValorConverter }}" />
+                                        </Grid>
+                                    </DataTemplate>
+                                </ListView.ItemTemplate>
+                            </ListView>
+                        </StackPanel>
+                    </Grid>
+                </ScrollViewer>
             </SplitView.Content>
         </SplitView>
     </Grid>

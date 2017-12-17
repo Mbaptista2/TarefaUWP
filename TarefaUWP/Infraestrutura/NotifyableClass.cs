@@ -5,6 +5,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Input;
 
 namespace TarefaUWP.Infraestrutura
 {
@@ -28,6 +29,27 @@ namespace TarefaUWP.Infraestrutura
                 data = value;
                 this.OnPropertyChanged(propertyName);
             }
+        }
+    }
+
+    public class RelayCommand : ICommand
+    {
+        private Action _methodToExecute;
+        public event EventHandler CanExecuteChanged;
+
+        public RelayCommand(Action methodToExecute)
+        {
+            _methodToExecute = methodToExecute;
+        }
+
+        public bool CanExecute(object parameter)
+        {
+            return true;
+        }
+
+        public void Execute(object parameter)
+        {
+            _methodToExecute.Invoke();
         }
     }
 }
