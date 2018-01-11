@@ -60,7 +60,7 @@ namespace TarefaUWP.View.Lancamentos
             if (mesano.Length > 1)
                 ViewModel.Initialize(RetornaMes(mesano[0]), Convert.ToInt32(mesano[1]));
             else
-                ViewModel.Initialize();
+                ViewModel.Initialize(0, 0);
             this.DataContext = ViewModel;
         }
         private int RetornaMes(string mes)

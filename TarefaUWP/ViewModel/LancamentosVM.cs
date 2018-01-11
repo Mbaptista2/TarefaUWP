@@ -26,13 +26,13 @@ namespace TarefaUWP.ViewModel
                 LancamentosReceita = new ObservableCollection<Lancamentos>();
                 LancamentosDespesas = new ObservableCollection<Lancamentos>();
                 LancamentosBalanco = new ObservableCollection<Balanco>();
-                    
+
 
                 ItensParaCombo = new ObservableCollection<string>();
                 ItensParaCombo.Add("Todos");
-                listaLancamentos.Where(p => p.Tipo == "R").ToList().ForEach(e => LancamentosReceita.Add(e));   
+                listaLancamentos.Where(p => p.Tipo == "R").ToList().ForEach(e => LancamentosReceita.Add(e));
                 listaLancamentos.Where(p => p.Tipo == "D").ToList().ForEach(e => LancamentosDespesas.Add(e));
-             
+
                 Balanco bal = new Balanco();
                 bal.ValorReceita = LancamentosReceita.Sum(p => p.Valor);
                 bal.ValorDespesa = LancamentosDespesas.Sum(p => p.Valor);
@@ -52,15 +52,23 @@ namespace TarefaUWP.ViewModel
                 LancamentosBalanco.Clear();
 
                 LancamentoRepositorio LancRepo = new LancamentoRepositorio();
-                List<Lancamentos> listaLancamentos = LancRepo.CarregarTodos();              
-                listaLancamentos.Where(p => p.Tipo == "R" && p.DataLancamento.Month == mes && p.DataLancamento.Year == ano).ToList().ForEach(e => LancamentosReceita.Add(e));
-                listaLancamentos.Where(p => p.Tipo == "D" && p.DataLancamento.Month == mes && p.DataLancamento.Year == ano).ToList().ForEach(e => LancamentosDespesas.Add(e));
+                List<Lancamentos> listaLancamentos = LancRepo.CarregarTodos();
+                if (mes > 0)
+                {
+                    listaLancamentos.Where(p => p.Tipo == "R" && p.DataLancamento.Month == mes && p.DataLancamento.Year == ano).ToList().ForEach(e => LancamentosReceita.Add(e));
+                    listaLancamentos.Where(p => p.Tipo == "D" && p.DataLancamento.Month == mes && p.DataLancamento.Year == ano).ToList().ForEach(e => LancamentosDespesas.Add(e));
+                }
+                else
+                {
+                    listaLancamentos.Where(p => p.Tipo == "R").ToList().ForEach(e => LancamentosReceita.Add(e));
+                    listaLancamentos.Where(p => p.Tipo == "D").ToList().ForEach(e => LancamentosDespesas.Add(e));
+                }
                 Balanco bal = new Balanco();
                 bal.ValorReceita = LancamentosReceita.Sum(p => p.Valor);
                 bal.ValorDespesa = LancamentosDespesas.Sum(p => p.Valor);
                 bal.ValorBalanco = bal.ValorReceita - bal.ValorDespesa;
                 LancamentosBalanco.Add(bal);
-                
+
             }
         }
 
@@ -103,7 +111,7 @@ namespace TarefaUWP.ViewModel
         #endregion
 
         public ObservableCollection<Lancamentos> LancamentosReceita { get; set; }
-        public ObservableCollection<Lancamentos> LancamentosDespesas { get; set; } 
+        public ObservableCollection<Lancamentos> LancamentosDespesas { get; set; }
         public ObservableCollection<Balanco> LancamentosBalanco { get; set; }
 
         public ObservableCollection<string> ItensParaCombo { get; set; }
@@ -115,7 +123,7 @@ namespace TarefaUWP.ViewModel
                             select new
                             {
                                 Mes = RecuperarMes(grp.Key.Month),
-                                Ano = grp.Key.Year.ToString(),                               
+                                Ano = grp.Key.Year.ToString(),
                             }).ToList();
 
             List<string> str = new List<string>();
@@ -146,7 +154,7 @@ namespace TarefaUWP.ViewModel
                 case 12: return "Dezembro";
                 default: return "Inválido";
             }
-        }      
+        }
     }
-       
+
 }
