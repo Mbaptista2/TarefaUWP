@@ -4,6 +4,8 @@ using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using TarefaUWP.Data;
+using TarefaUWP.Data.Servicos;
+using TarefaUWP.View.Configuracoes;
 using TarefaUWP.ViewModel;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
@@ -81,6 +83,11 @@ namespace TarefaUWP.View.Lancamentos
                 case "Dezembro": return 12;
                 default: return 99;
             }
+        }
+
+        private void MenuButton2_Click(object sender, RoutedEventArgs e)
+        {
+            NavigationService.Navigate<ConfiguracaoView>();
         }
     }
     
