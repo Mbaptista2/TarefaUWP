@@ -48,9 +48,9 @@ namespace TarefaUWP.Converters
         {
             try
             {
-                var data = (double)value;
+                var data =  (double)value;
 
-                return data.ToString();
+                return data.ToString("N");
             }
             catch
             {
