@@ -1,22 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
+﻿using Newtonsoft.Json;
+using TarefaUWP.Data.Servicos;
+using TarefaUWP.View.Configuracoes;
+using TarefaUWP.ViewModel;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Controls.Primitives;
-using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
-using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
-using Newtonsoft.Json;
-using TarefaUWP.Data.Servicos;
-using TarefaUWP.ViewModel;
-using TarefaUWP.Model;
-using TarefaUWP.View.Configuracoes;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=234238
 
@@ -66,7 +55,7 @@ namespace TarefaUWP.View.Lancamentos
         {
             Model.Lancamentos lancamento = null;
 
-            if(e.Parameter != null)
+            if (e.Parameter != null)
                 lancamento = JsonConvert.DeserializeObject<Model.Lancamentos>(e.Parameter.ToString());
 
             ViewModel.Lancamento = lancamento ?? new Model.Lancamentos();
@@ -77,6 +66,54 @@ namespace TarefaUWP.View.Lancamentos
             if (CbTipo.Items[CbTipo.SelectedIndex] is ComboBoxItem comboBoxItem)
             {
                 ViewModel.Lancamento.Tipo = comboBoxItem.Tag.ToString();
+            }
+        }
+      
+        private void txtValor_KeyDown(object sender, KeyRoutedEventArgs e)
+        {
+            if (System.Text.RegularExpressions.Regex.IsMatch(e.Key.ToString(), "[0-9]"))
+                e.Handled = false;
+            else e.Handled = true;
+        }
+        private bool _dialogTriggered;
+
+        private void ShowAppResetMessage()
+        {
+            if (_dialogTriggered)
+            {
+                return;
+            }
+
+            _dialogTriggered = true;
+
+            var dialog = new ContentDialog
+            {
+                Title = "Aviso",
+                Content = "Favor preencher um valor válido.",
+                PrimaryButtonText = "OK"
+            };
+
+            dialog.PrimaryButtonClick += (s, e) =>
+            {
+                _dialogTriggered = false;
+            };
+
+            dialog.ShowAsync();
+        }
+
+        private void txtValor_LostFocus(object sender, RoutedEventArgs e)
+        {
+            try
+            {                
+                if (txtValor.Text != string.Empty)
+                    txtValor.Text = string.Format("{0:0.00}", double.Parse(txtValor.Text));
+                else
+                    txtValor.Text = "0";
+            }
+            catch 
+            {
+                txtValor.Text = "0";
+                ShowAppResetMessage();
             }
         }
     }

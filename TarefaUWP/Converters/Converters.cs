@@ -47,9 +47,10 @@ namespace TarefaUWP.Converters
         {
             try
             {
+                CultureInfo c = new CultureInfo("pt-BR");
                 var data =  (double)value;
 
-                return data.ToString("N");
+                return data.ToString("N", c);
             }
             catch
             {
@@ -60,8 +61,9 @@ namespace TarefaUWP.Converters
         public object ConvertBack(object value, Type targetType, object parameter, string language)
         {
             try
-            {             
-                return double.Parse((string)value, CultureInfo.InvariantCulture);
+            {
+                CultureInfo c = new CultureInfo("pt-BR");
+                return double.Parse((string)value,c);
             }
             catch
             {
