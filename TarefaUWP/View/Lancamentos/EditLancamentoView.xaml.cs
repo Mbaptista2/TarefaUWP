@@ -36,6 +36,19 @@ namespace TarefaUWP.View.Lancamentos
         {
             this.InitializeComponent();
         }
+
+        protected override void OnNavigatedTo(NavigationEventArgs e)
+        {
+            Model.Lancamentos lancamento = null;
+
+            if (e.Parameter != null)
+                lancamento = JsonConvert.DeserializeObject<Model.Lancamentos>(e.Parameter.ToString());
+            else
+                DeleteButton.Visibility = Visibility.Collapsed;
+
+            ViewModel.Lancamento = lancamento ?? new Model.Lancamentos();
+        }
+
         private void HamburgerButton_Click(object sender, RoutedEventArgs e)
         {
             SplitView1.IsPaneOpen = !SplitView1.IsPaneOpen;
@@ -51,32 +64,28 @@ namespace TarefaUWP.View.Lancamentos
             NavigationService.Navigate<EditLancamentoView>();
         }
 
-        public Model.Lancamentos EditTodoItem
-        {
-            get => (Model.Lancamentos)GetValue(EditLancamentoProperty);
-            set
-            {
-                SetValue(EditLancamentoProperty, value);
-                ViewModel.Lancamento = value;
-                ViewModel.Initialize();
-            }
-        }
-
-        protected override void OnNavigatedTo(NavigationEventArgs e)
-        {
-            Model.Lancamentos lancamento = null;
-
-            if(e.Parameter != null)
-                lancamento = JsonConvert.DeserializeObject<Model.Lancamentos>(e.Parameter.ToString());
-
-            ViewModel.Lancamento = lancamento ?? new Model.Lancamentos();
-        }
-
         private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (CbTipo.Items[CbTipo.SelectedIndex] is ComboBoxItem comboBoxItem)
             {
                 ViewModel.Lancamento.Tipo = comboBoxItem.Tag.ToString();
+            }
+        }
+
+        private void Data_Loaded(object sender, RoutedEventArgs e)
+        {
+            Data.Date = DateTimeOffset.Now;
+        }
+
+        private void CbTipo_Loaded(object sender, RoutedEventArgs e)
+        {
+            if (String.IsNullOrEmpty(ViewModel.Lancamento.Id))
+            {
+                ViewModel.Lancamento.Tipo = ((ComboBoxItem) CbTipo.Items[0]).Tag.ToString();
+            }
+            else
+            {
+                CbTipo.SelectedIndex = ViewModel.Lancamento.Tipo == "D" ? 0 : 1;
             }
         }
     }

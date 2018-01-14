@@ -168,21 +168,39 @@ namespace TarefaUWP.ViewModel
 
         public void SaveLancamentoButton_Click()
         {
-            //if (TodoItems.Any(t => t.Id == TodoItem.Id))
-            //{
-            //    await ManageAppointment();
-
-            //    await TodoItemRepository.Update(TodoItem);
-            //}
-            //else
-            //{
-            LancamentoRepo.Inserir(Lancamento);
-            //}
+            if (!String.IsNullOrEmpty(Lancamento.Id))
+            {
+                LancamentoRepo.Atualizar(Lancamento);
+            }
+            else
+            {
+                LancamentoRepo.Inserir(Lancamento);
+            }
 
             if (NavigationService.CanGoBack)
             {
                 NavigationService.GoBack();
             }
+        }
+
+        public async void DeleteLancamentoButton_Click()
+        {
+            var dialog = new ContentDialog
+            {
+                Title = "Confirmação",
+                Content = "Você deseja excluir o lançamento?",
+                PrimaryButtonText = "Sim",
+                SecondaryButtonText = "Não"
+            };
+
+            dialog.PrimaryButtonClick += (sender, args) =>
+            {
+                LancamentoRepo.Excluir(Lancamento);
+
+                NavigationService.GoBack();
+            };
+
+            await dialog.ShowAsync();
         }
     }
 

@@ -56,7 +56,7 @@
                         <StackPanel Padding="12">
                             <TextBox Header="Descrição" Text="{x:Bind ViewModel.Lancamento.Descricao, Mode=TwoWay}" TextWrapping="Wrap" Height="120" Margin="0,12" />
 
-                            <ComboBox Name="CbTipo" Header="Tipo" PlaceholderText="Selecione o tipo do lançamento" Margin="0,12" SelectionChanged="ComboBox_SelectionChanged">
+                            <ComboBox Name="CbTipo" Header="Tipo" PlaceholderText="Selecione o tipo do lançamento" Margin="0,12" SelectionChanged="ComboBox_SelectionChanged" Loaded="CbTipo_Loaded">
                                 <ComboBoxItem Content="Despesa" IsSelected="True" Tag="D"></ComboBoxItem>
                                 <ComboBoxItem Content="Recebimento" Tag="R"></ComboBoxItem>
                             </ComboBox>
@@ -64,7 +64,7 @@
                             <TextBox Header="Valor" Text="{x:Bind ViewModel.Lancamento.Valor, Mode=TwoWay}" TextWrapping="Wrap" Height="120" Margin="0,12" />
 
                             <CalendarDatePicker Name="Data" Header="Data do lançamento" Date="{x:Bind ViewModel.Lancamento.DataLancamento, Mode=TwoWay, Converter={StaticResource TimeConverter}}" PlaceholderText="Selecione a data do lançamento"
-                                                Margin="0, 12"/>
+                                                Margin="0, 12" Loaded="Data_Loaded"/>
                         </StackPanel>
                     </Grid>
                 </ScrollViewer>
@@ -75,7 +75,7 @@
         <CommandBar>
             <CommandBar.PrimaryCommands>
                 <AppBarButton Label="Save" Icon="Save" Click="{x:Bind ViewModel.SaveLancamentoButton_Click}" />
-                <!--<AppBarButton Label="Delete" Icon="Delete" Click="{x:Bind ViewModel.DeleteTodoItemButton_Click}" />-->
+                <AppBarButton Name="DeleteButton" Label="Delete" Icon="Delete" Click="{x:Bind ViewModel.DeleteLancamentoButton_Click}" />
             </CommandBar.PrimaryCommands>
         </CommandBar>
     </Page.BottomAppBar>

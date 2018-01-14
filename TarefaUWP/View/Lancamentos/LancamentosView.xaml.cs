@@ -95,5 +95,11 @@ namespace TarefaUWP.View.Lancamentos
         {
             NavigationService.Navigate<EditLancamentoView>();
         }
+
+        private void ListView_ItemClick(object sender, ItemClickEventArgs e)
+        {
+            Model.Lancamentos item = (Model.Lancamentos)e.ClickedItem;
+            NavigationService.Navigate<EditLancamentoView>(item);
+        }
     }
 }
