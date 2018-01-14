@@ -33,7 +33,13 @@
                        Width="44" Height="44" Background="Transparent" />
                         <TextBlock Text="Despesas" FontSize="18" VerticalAlignment="Center" />
                     </StackPanel>
-
+                    
+                    <StackPanel Orientation="Horizontal">
+                        <Button x:Name="MenuButton3" FontFamily="Segoe MDL2 Assets" Content="&#xE710;"
+                                Width="44" Height="44" Background="Transparent"  Click="MenuButton3_Click"/>
+                        <TextBlock Text="Adicionar Lançamento" FontSize="18" VerticalAlignment="Center" />
+                    </StackPanel>
+                    
                     <StackPanel Orientation="Horizontal">
                         <Button x:Name="MenuButton2" FontFamily="Segoe MDL2 Assets" Content="&#xE713;"
                        Width="44" Height="44" Background="Transparent"  Click="MenuButton2_Click"/>

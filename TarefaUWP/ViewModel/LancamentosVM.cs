@@ -10,11 +10,13 @@ using TarefaUWP.Model;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Data;
+using TarefaUWP.Data.Servicos;
 
 namespace TarefaUWP.ViewModel
 {
     public class LancamentosVM : NotifyableClass
     {
+        public LancamentoRepositorio LancamentoRepo { get; private set; } = LancamentoRepositorio.Instance;
 
         public void Initialize()
         {
@@ -153,6 +155,33 @@ namespace TarefaUWP.ViewModel
                 case 11: return "Novembro";
                 case 12: return "Dezembro";
                 default: return "Inválido";
+            }
+        }
+
+        private Lancamentos _lancamento;
+
+        public Lancamentos Lancamento
+        {
+            get => _lancamento ?? new Lancamentos();
+            set => Set(ref _lancamento, value);
+        }
+
+        public void SaveLancamentoButton_Click()
+        {
+            //if (TodoItems.Any(t => t.Id == TodoItem.Id))
+            //{
+            //    await ManageAppointment();
+
+            //    await TodoItemRepository.Update(TodoItem);
+            //}
+            //else
+            //{
+            LancamentoRepo.Inserir(Lancamento);
+            //}
+
+            if (NavigationService.CanGoBack)
+            {
+                NavigationService.GoBack();
             }
         }
     }

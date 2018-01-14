@@ -11,6 +11,10 @@ namespace TarefaUWP.Data.Repositorios
 {
     public class LancamentoRepositorio : RepositorioBase<Lancamentos>
     {
+        private static readonly Lazy<LancamentoRepositorio> _instance =
+            new Lazy<LancamentoRepositorio>(() => new LancamentoRepositorio());
+
+        public static LancamentoRepositorio Instance => _instance.Value;
 
         Contexto context = new Contexto();
         public override void Atualizar(Lancamentos entity)
@@ -26,29 +30,29 @@ namespace TarefaUWP.Data.Repositorios
 
         public override List<Lancamentos> CarregarTodos()
         {
-            //return context.Set<Lancamentos>().ToList();
+            return context.Set<Lancamentos>().ToList();
 
-            List<Lancamentos> lista = new List<Lancamentos>();
+            //List<Lancamentos> lista = new List<Lancamentos>();
 
-            for (int i = 0; i < 3; i++)
-            {
-                Lancamentos lanc = new Lancamentos();
-                lanc.Descricao = "Teste";
-                lanc.Valor = 100.50;
-                lanc.DataLancamento = new DateTime(2017, 02 + i, 01).Date;
-                lanc.Tipo = "R";
-                lista.Add(lanc);
-            }
-            for (int i = 0; i < 20; i++)
-            {
-                Lancamentos lanc = new Lancamentos();
-                lanc.Descricao = "Teste Despesa";
-                lanc.Valor = 45;
-                lanc.DataLancamento = new DateTime(2017, 02 , 01).Date;
-                lanc.Tipo = "D";
-                lista.Add(lanc);
-            }
-            return lista;
+            //for (int i = 0; i < 3; i++)
+            //{
+            //    Lancamentos lanc = new Lancamentos();
+            //    lanc.Descricao = "Teste";
+            //    lanc.Valor = 100.50;
+            //    lanc.DataLancamento = new DateTime(2017, 02 + i, 01).Date;
+            //    lanc.Tipo = "R";
+            //    lista.Add(lanc);
+            //}
+            //for (int i = 0; i < 20; i++)
+            //{
+            //    Lancamentos lanc = new Lancamentos();
+            //    lanc.Descricao = "Teste Despesa";
+            //    lanc.Valor = 45;
+            //    lanc.DataLancamento = new DateTime(2017, 02 , 01).Date;
+            //    lanc.Tipo = "D";
+            //    lista.Add(lanc);
+            //}
+            //return lista;
         }
 
         public override void Excluir(Lancamentos entity)

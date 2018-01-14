@@ -17,6 +17,8 @@ using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
+using Microsoft.EntityFrameworkCore;
+using TarefaUWP.Data;
 
 namespace TarefaUWP
 {
@@ -35,6 +37,11 @@ namespace TarefaUWP
             this.Suspending += OnSuspending;
 
             this.RequestedTheme = StorageService.GetSetting(StorageService.Settings.AppTheme, ApplicationTheme.Dark);
+
+            using (var context = new Contexto())
+            {
+                context.Database.Migrate();
+            }
         }
 
         /// <summary>

@@ -119,6 +119,9 @@
     <Compile Include="View\Configuracoes\ConfiguracaoView.xaml.cs">
       <DependentUpon>ConfiguracaoView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="View\Lancamentos\EditLancamentoView.xaml.cs">
+      <DependentUpon>EditLancamentoView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\Lancamentos\LancamentosView.xaml.cs">
       <DependentUpon>LancamentosView.xaml</DependentUpon>
     </Compile>
@@ -149,6 +152,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="View\Configuracoes\ConfiguracaoView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Lancamentos\EditLancamentoView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
