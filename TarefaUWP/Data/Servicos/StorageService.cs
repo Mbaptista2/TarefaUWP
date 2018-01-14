@@ -41,8 +41,7 @@ namespace TarefaUWP.Data.Servicos
 
         public enum Folders
         {
-            TodoItems,
-            Categories
+            Lancamento
         }
 
         private static async Task<StorageFolder> GetStorageFolder(Folders folder)

@@ -222,23 +222,23 @@ namespace TarefaUWP.ViewModel
             await dialog.ShowAsync();
         }
 
-        private Lancamentos _selectedDeleteTodoItem;
-        public void TodoItems_RightTapped(object sender, RightTappedRoutedEventArgs e)
+        private Lancamentos _selectedDeleteLancamento;
+        public void Lancamentos_RightTapped(object sender, RightTappedRoutedEventArgs e)
         {
-            _selectedDeleteTodoItem = ((FrameworkElement)e.OriginalSource).DataContext as Lancamentos;
+            _selectedDeleteLancamento = ((FrameworkElement)e.OriginalSource).DataContext as Lancamentos;
         }
 
         public void RemoveItemFlyout_Click()
         {
-            if (_selectedDeleteTodoItem != null)
+            if (_selectedDeleteLancamento != null)
             {
-                LancamentoRepo.Excluir(_selectedDeleteTodoItem);
-                LancamentosReceita.Remove(_selectedDeleteTodoItem);
-                LancamentosDespesas.Remove(_selectedDeleteTodoItem);
+                LancamentoRepo.Excluir(_selectedDeleteLancamento);
+                LancamentosReceita.Remove(_selectedDeleteLancamento);
+                LancamentosDespesas.Remove(_selectedDeleteLancamento);
 
                 CarregarBalanco();
 
-                _selectedDeleteTodoItem = null;
+                _selectedDeleteLancamento = null;
             }
         }
     }
