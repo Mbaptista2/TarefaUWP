@@ -5,7 +5,6 @@ using Windows.UI.Xaml.Data;
 
 namespace TarefaUWP.Converters
 {
-
     public class VisibleWhenZeroConverter : IValueConverter
     {
         public object Convert(object v, Type t, object p, string l) =>
@@ -88,6 +87,20 @@ namespace TarefaUWP.Converters
             var radioButtonValue = parameter as string;
             var isChecked = System.Convert.ToBoolean(value);
             return isChecked ? System.Convert.ToInt32(radioButtonValue) : default(int?);
+        }
+    }
+
+    public class TimeConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, string language)
+        {
+            return new DateTimeOffset(((DateTime)value).ToUniversalTime());
+
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, string language)
+        {
+            return ((DateTimeOffset)value).DateTime;
         }
     }
 }

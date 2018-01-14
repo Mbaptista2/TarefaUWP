@@ -5,6 +5,7 @@ using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using TarefaUWP.Data;
 using TarefaUWP.Data.Servicos;
+using TarefaUWP.Model;
 using TarefaUWP.View.Configuracoes;
 using TarefaUWP.ViewModel;
 using Windows.Foundation;
@@ -89,6 +90,10 @@ namespace TarefaUWP.View.Lancamentos
         {
             NavigationService.Navigate<ConfiguracaoView>();
         }
+
+        private void MenuButton3_Click(object sender, RoutedEventArgs e)
+        {
+            NavigationService.Navigate<EditLancamentoView>();
+        }
     }
-    
 }
