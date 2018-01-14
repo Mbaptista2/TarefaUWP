@@ -1,5 +1,6 @@
-﻿using System;
+﻿﻿using System;
 using Newtonsoft.Json;
+using System;
 using TarefaUWP.Data.Servicos;
 using TarefaUWP.View.Configuracoes;
 using TarefaUWP.ViewModel;
@@ -116,7 +117,7 @@ namespace TarefaUWP.View.Lancamentos
 
         private void Data_Loaded(object sender, RoutedEventArgs e)
         {
-            Data.Date = DateTimeOffset.Now;
+            Data.Date = System.DateTimeOffset.Now;
         }
 
         private void CbTipo_Loaded(object sender, RoutedEventArgs e)
