@@ -2,15 +2,14 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Windows.Input;
 using TarefaUWP.Data;
 using TarefaUWP.Data.Repositorios;
+using TarefaUWP.Data.Servicos;
 using TarefaUWP.Infraestrutura;
 using TarefaUWP.Model;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Data;
-using TarefaUWP.Data.Servicos;
+using Windows.UI.Xaml.Input;
 
 namespace TarefaUWP.ViewModel
 {
@@ -65,15 +64,19 @@ namespace TarefaUWP.ViewModel
                     listaLancamentos.Where(p => p.Tipo == "R").ToList().ForEach(e => LancamentosReceita.Add(e));
                     listaLancamentos.Where(p => p.Tipo == "D").ToList().ForEach(e => LancamentosDespesas.Add(e));
                 }
-                Balanco bal = new Balanco();
-                bal.ValorReceita = LancamentosReceita.Sum(p => p.Valor);
-                bal.ValorDespesa = LancamentosDespesas.Sum(p => p.Valor);
-                bal.ValorBalanco = bal.ValorReceita - bal.ValorDespesa;
-                LancamentosBalanco.Add(bal);
 
+                CarregarBalanco();
             }
         }
-
+        private void CarregarBalanco()
+        {
+            LancamentosBalanco.Clear();
+            Balanco bal = new Balanco();
+            bal.ValorReceita = LancamentosReceita.Sum(p => p.Valor);
+            bal.ValorDespesa = LancamentosDespesas.Sum(p => p.Valor);
+            bal.ValorBalanco = bal.ValorReceita - bal.ValorDespesa;
+            LancamentosBalanco.Add(bal);
+        }
         #region Propriedades
 
         private string _id;
@@ -109,7 +112,7 @@ namespace TarefaUWP.ViewModel
         {
             get { return _descricao; }
             set { Set(ref _descricao, value); }
-        }
+        }       
         #endregion
 
         public ObservableCollection<Lancamentos> LancamentosReceita { get; set; }
@@ -201,6 +204,26 @@ namespace TarefaUWP.ViewModel
             };
 
             await dialog.ShowAsync();
+        }
+
+        private Lancamentos _selectedDeleteTodoItem;
+        public void TodoItems_RightTapped(object sender, RightTappedRoutedEventArgs e)
+        {
+            _selectedDeleteTodoItem = ((FrameworkElement)e.OriginalSource).DataContext as Lancamentos;
+        }
+
+        public void RemoveItemFlyout_Click()
+        {
+            if (_selectedDeleteTodoItem != null)
+            {
+                LancamentoRepo.Excluir(_selectedDeleteTodoItem);
+                LancamentosReceita.Remove(_selectedDeleteTodoItem);
+                LancamentosDespesas.Remove(_selectedDeleteTodoItem);
+
+                CarregarBalanco();
+
+                _selectedDeleteTodoItem = null;
+            }
         }
     }
 
