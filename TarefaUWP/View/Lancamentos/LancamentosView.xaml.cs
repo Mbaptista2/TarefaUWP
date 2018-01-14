@@ -32,15 +32,18 @@ namespace TarefaUWP.View.Lancamentos
 
         public LancamentosView()
         {
-            this.InitializeComponent();
-         
-            ApplicationView.PreferredLaunchViewSize = new Size(1000, 800);
-            ApplicationView.GetForCurrentView().SetPreferredMinSize(new Size(1000, 800));           
+            ApplicationView.PreferredLaunchViewSize = new Size(1300, 800);
+            ApplicationView.GetForCurrentView().SetPreferredMinSize(new Size(1300, 800));
             ApplicationView.PreferredLaunchWindowingMode = ApplicationViewWindowingMode.PreferredLaunchViewSize;
+
+            this.InitializeComponent();
 
             ViewModel = new  LancamentosVM();
             ViewModel.Initialize();
             this.DataContext = ViewModel;
+
+            VisualStateGroupScreenWidth.CurrentStateChanged += LancamentosView_CurrentStateChanged;
+            UpdateViewModelState(VisualStateGroupScreenWidth.CurrentState);
         }
 
         public LancamentosView(int mes, int ano)
@@ -49,7 +52,31 @@ namespace TarefaUWP.View.Lancamentos
             ViewModel.Initialize(mes, ano);
             this.DataContext = ViewModel;
         }
-        
+
+        private void UpdateViewModelState(VisualState currentState)
+        {
+            ViewModel.State = currentState == VisualStateMinWidth1 ? LancamentosVM.PageState.MinWidth0 : LancamentosVM.PageState.MinWidth1100;
+
+            if (ViewModel.State == LancamentosVM.PageState.MinWidth1100)
+            {
+                SplitView1.IsPaneOpen = true;
+                HamburgerButton.Visibility = Visibility.Collapsed;
+                SplitView1.DisplayMode = SplitViewDisplayMode.Inline;
+                Receitas.Width = Despesas.Width = Balanco.Width = 800;
+            }
+            else
+            {
+                SplitView1.IsPaneOpen = false;
+                HamburgerButton.Visibility = Visibility.Visible;
+                SplitView1.DisplayMode = SplitViewDisplayMode.CompactOverlay;
+                Receitas.Width = Despesas.Width = Balanco.Width = 480;
+            }
+        }
+
+        private void LancamentosView_CurrentStateChanged(object sender, VisualStateChangedEventArgs e)
+        {
+            UpdateViewModelState(e.NewState);
+        }
 
         private void HamburgerButton_Click(object sender, RoutedEventArgs e)
         {

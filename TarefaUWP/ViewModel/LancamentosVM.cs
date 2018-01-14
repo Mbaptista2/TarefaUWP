@@ -11,6 +11,7 @@ using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Data;
 using TarefaUWP.Data.Servicos;
+using TarefaUWP.View.Lancamentos;
 
 namespace TarefaUWP.ViewModel
 {
@@ -166,7 +167,7 @@ namespace TarefaUWP.ViewModel
             set => Set(ref _lancamento, value);
         }
 
-        public void SaveLancamentoButton_Click()
+        public void SaveLancamento()
         {
             if (!String.IsNullOrEmpty(Lancamento.Id))
             {
@@ -181,6 +182,19 @@ namespace TarefaUWP.ViewModel
             {
                 NavigationService.GoBack();
             }
+        }
+
+        public enum PageState
+        {
+            MinWidth0 = 0,
+            MinWidth1100
+        }
+
+        public PageState State { get; set; }
+
+        public void AddLancamentoButton_Click()
+        {
+            NavigationService.Navigate<EditLancamentoView>();
         }
 
         public async void DeleteLancamentoButton_Click()

@@ -21,7 +21,21 @@
     </Page.Resources>
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-        <SplitView x:Name="SplitView1" OpenPaneLength="200" DisplayMode="CompactOverlay" CompactPaneLength="44">
+        <VisualStateManager.VisualStateGroups>
+            <VisualStateGroup x:Name="VisualStateGroupScreenWidth">
+                <VisualState x:Name="VisualStateMinWidth1100">
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="1100"/>
+                    </VisualState.StateTriggers>
+                </VisualState>
+                <VisualState x:Name="VisualStateMinWidth1">
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="1"/>
+                    </VisualState.StateTriggers>
+                </VisualState>
+            </VisualStateGroup>
+        </VisualStateManager.VisualStateGroups>
+        <SplitView x:Name="SplitView1" OpenPaneLength="250" DisplayMode="CompactOverlay" CompactPaneLength="44">
             <SplitView.Pane>
                 <StackPanel>
                     <Button Width="44" Height="44" x:Name="HamburgerButton" FontFamily="Segoe MDL2 Assets" Content="&#xE700;"
@@ -29,20 +43,20 @@
 
                     <StackPanel Orientation="Horizontal">
                         <Button x:Name="MenuButton1" FontFamily="Segoe MDL2 Assets" Content="&#xE10F;"
-                                Width="44" Height="44" Background="Transparent" />
-                        <TextBlock Text="Despesas" FontSize="18" VerticalAlignment="Center" />
+                                Width="44" Height="44" Click="MenuButton1_Click" Background="Transparent" />
+                        <TextBlock Text="Despesas" Tapped="MenuButton1_Click" FontSize="18" VerticalAlignment="Center" />
                     </StackPanel>
 
                     <StackPanel Orientation="Horizontal">
                         <Button x:Name="MenuButton3" FontFamily="Segoe MDL2 Assets" Content="&#xE710;"
                                 Width="44" Height="44" Background="Transparent"  Click="MenuButton3_Click"/>
-                        <TextBlock Text="Adicionar Lançamento" FontSize="18" VerticalAlignment="Center" />
+                        <TextBlock Text="Adicionar Lançamento" FontSize="18" Tapped="MenuButton3_Click" VerticalAlignment="Center" />
                     </StackPanel>
                     
                     <StackPanel Orientation="Horizontal">
                         <Button x:Name="MenuButton2" FontFamily="Segoe MDL2 Assets" Content="&#xE713;"
                                 Width="44" Height="44" Background="Transparent"  Click="MenuButton2_Click"/>
-                        <TextBlock Text="Configurações" FontSize="18" VerticalAlignment="Center" />
+                        <TextBlock Text="Configurações" FontSize="18" Tapped="MenuButton2_Click" VerticalAlignment="Center" />
                     </StackPanel>
                     
                 </StackPanel>
@@ -50,11 +64,12 @@
             <SplitView.Content>
                 <ScrollViewer ZoomMode="Enabled" MaxZoomFactor="10"
                               HorizontalScrollBarVisibility="Visible"
-                              Height="980">
-                    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+                              Height="980" >
+                    <Grid Name="PageContainer" Width="800" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
                         <StackPanel Padding="12">
                             <TextBox Header="Descrição" Text="{x:Bind ViewModel.Lancamento.Descricao, Mode=TwoWay}" TextWrapping="Wrap" Height="120" Margin="0,12" />
+                            <TextBlock Name="DescricaoError" Foreground="#FFE60A0A"></TextBlock>
 
                             <ComboBox Name="CbTipo" Header="Tipo" PlaceholderText="Selecione o tipo do lançamento" Margin="0,12" SelectionChanged="ComboBox_SelectionChanged" Loaded="CbTipo_Loaded">
                                 <ComboBoxItem Content="Despesa" IsSelected="True" Tag="D"></ComboBoxItem>
@@ -62,6 +77,7 @@
                             </ComboBox>
 
                             <TextBox Header="Valor" Text="{x:Bind ViewModel.Lancamento.Valor, Mode=TwoWay}"  Margin="0,12" Name="txtValor" LostFocus="txtValor_LostFocus"  KeyDown="txtValor_KeyDown" />
+                            <TextBlock Name="ValorError" Foreground="#FFE60A0A"></TextBlock>
 
                             <CalendarDatePicker Name="Data" Header="Data do lançamento" Date="{x:Bind ViewModel.Lancamento.DataLancamento, Mode=TwoWay, Converter={StaticResource TimeConverter}}" PlaceholderText="Selecione a data do lançamento"
                                                 Margin="0, 12" Loaded="Data_Loaded"/>
@@ -74,7 +90,7 @@
     <Page.BottomAppBar>
         <CommandBar>
             <CommandBar.PrimaryCommands>
-                <AppBarButton Label="Save" Icon="Save" Click="{x:Bind ViewModel.SaveLancamentoButton_Click}" />
+                <AppBarButton Label="Save" Icon="Save" Click="SaveLancamentoButton_Click" />
                 <AppBarButton Name="DeleteButton" Label="Delete" Icon="Delete" Click="{x:Bind ViewModel.DeleteLancamentoButton_Click}" />
             </CommandBar.PrimaryCommands>
         </CommandBar>

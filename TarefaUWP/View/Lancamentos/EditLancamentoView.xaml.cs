@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using System;
+using Newtonsoft.Json;
 using TarefaUWP.Data.Servicos;
 using TarefaUWP.View.Configuracoes;
 using TarefaUWP.ViewModel;
@@ -24,6 +25,34 @@ namespace TarefaUWP.View.Lancamentos
         public EditLancamentoView()
         {
             this.InitializeComponent();
+
+            VisualStateGroupScreenWidth.CurrentStateChanged += EditLancamentoView_CurrentStateChanged;
+            UpdateViewModelState(VisualStateGroupScreenWidth.CurrentState);
+        }
+
+        private void UpdateViewModelState(VisualState currentState)
+        {
+            ViewModel.State = currentState == VisualStateMinWidth1 ? LancamentosVM.PageState.MinWidth0 : LancamentosVM.PageState.MinWidth1100;
+
+            if (ViewModel.State == LancamentosVM.PageState.MinWidth1100)
+            {
+                SplitView1.IsPaneOpen = true;
+                HamburgerButton.Visibility = Visibility.Collapsed;
+                SplitView1.DisplayMode = SplitViewDisplayMode.Inline;
+                PageContainer.Width = 800;
+            }
+            else
+            {
+                SplitView1.IsPaneOpen = false;
+                HamburgerButton.Visibility = Visibility.Visible;
+                SplitView1.DisplayMode = SplitViewDisplayMode.CompactOverlay;
+                PageContainer.Width = 480;
+            }
+        }
+
+        private void EditLancamentoView_CurrentStateChanged(object sender, VisualStateChangedEventArgs e)
+        {
+            UpdateViewModelState(e.NewState);
         }
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
@@ -43,6 +72,11 @@ namespace TarefaUWP.View.Lancamentos
             SplitView1.IsPaneOpen = !SplitView1.IsPaneOpen;
         }
 
+        private void MenuButton1_Click(object sender, RoutedEventArgs e)
+        {
+            NavigationService.Navigate<LancamentosView>();
+        }
+
         private void MenuButton2_Click(object sender, RoutedEventArgs e)
         {
             NavigationService.Navigate<ConfiguracaoView>();
@@ -51,6 +85,25 @@ namespace TarefaUWP.View.Lancamentos
         private void MenuButton3_Click(object sender, RoutedEventArgs e)
         {
             NavigationService.Navigate<EditLancamentoView>();
+        }
+
+        private void SaveLancamentoButton_Click(object sender, RoutedEventArgs e)
+        {
+            var isValid = true;
+            if (String.IsNullOrEmpty(ViewModel.Lancamento.Descricao))
+            {
+                DescricaoError.Text = "Descrição não pode ser vazia";
+                isValid = false;
+            }
+            if (ViewModel.Valor < 0)
+            {
+                ValorError.Text = "Valor não pode ser negativo";
+                isValid = false;
+            }
+            if (isValid)
+            {
+                ViewModel.SaveLancamento();
+            }
         }
 
         private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -86,7 +139,7 @@ namespace TarefaUWP.View.Lancamentos
         }
         private bool _dialogTriggered;
 
-        private void ShowAppResetMessage()
+        private async void ShowAppResetMessage()
         {
             if (_dialogTriggered)
             {
@@ -107,7 +160,7 @@ namespace TarefaUWP.View.Lancamentos
                 _dialogTriggered = false;
             };
 
-            dialog.ShowAsync();
+            await dialog.ShowAsync();
         }
 
         private void txtValor_LostFocus(object sender, RoutedEventArgs e)
