@@ -91,7 +91,7 @@ namespace TarefaUWP.View.Lancamentos
         private void SaveLancamentoButton_Click(object sender, RoutedEventArgs e)
         {
             var isValid = true;
-            if (String.IsNullOrEmpty(ViewModel.Lancamento.Descricao))
+            if (txtDescricao.Text == string.Empty)
             {
                 DescricaoError.Text = "Descrição não pode ser vazia";
                 isValid = false;
@@ -99,7 +99,7 @@ namespace TarefaUWP.View.Lancamentos
             else
                 DescricaoError.Text = string.Empty;
 
-            if (ViewModel.Lancamento.Valor <= 0)
+            if (Convert.ToDouble(txtValor.Text) <= 0)
             {
                 ValorError.Text = "Valor do lançamento deve ser maior que zero";
                 isValid = false;

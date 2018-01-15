@@ -68,7 +68,7 @@
                     <Grid Name="PageContainer" Width="800" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
                         <StackPanel Padding="12">
-                            <TextBox Header="Descrição" Text="{x:Bind ViewModel.Lancamento.Descricao, Mode=TwoWay}" TextWrapping="Wrap" Height="120" Margin="0,12" />
+                            <TextBox Header="Descrição" Text="{x:Bind ViewModel.Lancamento.Descricao, Mode=TwoWay}" TextWrapping="Wrap" Height="120" Margin="0,12" Name="txtDescricao" />
                             <TextBlock Name="DescricaoError" Foreground="#FFE60A0A"></TextBlock>
 
                             <ComboBox Name="CbTipo" Header="Tipo" PlaceholderText="Selecione o tipo do lançamento" Margin="0,12" SelectionChanged="ComboBox_SelectionChanged" Loaded="CbTipo_Loaded">
