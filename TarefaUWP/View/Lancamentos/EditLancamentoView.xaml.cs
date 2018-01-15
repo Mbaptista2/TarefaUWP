@@ -96,11 +96,17 @@ namespace TarefaUWP.View.Lancamentos
                 DescricaoError.Text = "Descrição não pode ser vazia";
                 isValid = false;
             }
-            if (ViewModel.Valor < 0)
+            else
+                DescricaoError.Text = string.Empty;
+
+            if (ViewModel.Lancamento.Valor <= 0)
             {
-                ValorError.Text = "Valor não pode ser negativo";
+                ValorError.Text = "Valor do lançamento deve ser maior que zero";
                 isValid = false;
             }
+            else
+                ValorError.Text = string.Empty;
+
             if (isValid)
             {
                 ViewModel.SaveLancamento();
